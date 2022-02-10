@@ -4,13 +4,20 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 
 import ProfileImg from "../../assets/img/profile-picture-3.jpg";
 import LoginModal from "./LoginModal";
+import useStore from "../../store";
 
-type Props = {
-  isLoggedIn: boolean;
-};
+type Props = {};
 
-export default function Login({ isLoggedIn = false }: Props) {
+export default function Login({}: Props) {
   let [isOpen, setIsOpen] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useStore((state) => ({
+    isLoggedIn: state.isLoggedIn,
+    setIsLoggedIn: state.setIsLoggedIn,
+  }));
+
+  const onLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   if (!isLoggedIn) {
     return (
@@ -72,6 +79,7 @@ export default function Login({ isLoggedIn = false }: Props) {
             <Menu.Item>
               {({ active }) => (
                 <button
+                  onClick={() => onLogout()}
                   className={`${
                     active ? "bg-blue-500 text-white" : "text-gray-900"
                   } group flex rounded-md items-center w-full px-2 py-2 text-sm`}

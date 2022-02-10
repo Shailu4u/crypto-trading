@@ -3,6 +3,7 @@ import { Fragment, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import useStore from "../../store";
 
 type LoginModalProps = {
   open: boolean;
@@ -23,10 +24,15 @@ const schema = yup
 
 export default function LoginModal({ open, onClose }: LoginModalProps) {
   let [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState("");
+  const { setIsLoggedIn, setNotification } = useStore((state) => ({
+    setIsLoggedIn: state.setIsLoggedIn,
+    setNotification: state.setNotification,
+  }));
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>({ resolver: yupResolver(schema) });
 
@@ -39,9 +45,25 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
     onClose();
   }
 
-  const onSubmit = (values: any) => {
-    console.log(values);
-    closeModal();
+  const onSubmit = ({ email, password }: FormData) => {
+    if (email === "admin@coinmena.com" && password === "123") {
+      setIsLoggedIn(true);
+      setNotification([
+        {
+          type: "success",
+          message: "Successfully Logged In",
+        },
+      ]);
+      closeModal();
+    } else {
+      setError("Your Password or User Id is not correct!");
+      setNotification([
+        {
+          type: "error",
+          message: "Your Password or User Id is not correct!",
+        },
+      ]);
+    }
   };
 
   return (
@@ -143,6 +165,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                       </label>
                     </div>
                   </div>
+                  {error && <div className="text-red-500">{error}</div>}
                   <div className="mt-4">
                     <button
                       type="submit"
