@@ -6,9 +6,7 @@ import ProfileImg from "../../assets/img/profile-picture-3.jpg";
 import LoginModal from "./LoginModal";
 import useStore from "../../store";
 
-type Props = {};
-
-export default function Login({}: Props) {
+export default function Login() {
   let [isOpen, setIsOpen] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useStore((state) => ({
     isLoggedIn: state.isLoggedIn,
@@ -39,11 +37,7 @@ export default function Login({}: Props) {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="flex mr-3 items-center text-sm rounded-full md:mr-0">
         <span className="sr-only">Open user menu</span>
-        <img
-          className="w-11 h-11 rounded-full"
-          src={ProfileImg}
-          alt="user photo"
-        />
+        <img className="w-11 h-11 rounded-full" src={ProfileImg} alt="user" />
         <ChevronDownIcon
           className="w-5 h-5 mr-1 text-gray-400 hover:text-gray-200"
           aria-hidden="true"

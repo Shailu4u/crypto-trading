@@ -3,9 +3,7 @@ import { NavLink } from "react-router-dom";
 import useStore from "../../store";
 import Login from "../Login/Login";
 
-type Props = {};
-
-export default function Header({}: Props) {
+export default function Header() {
   const isLoggedIn = useStore((state) => state.isLoggedIn);
 
   return (

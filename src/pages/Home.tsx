@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import useStore from "../store";
 import { formatCash } from "../utils";
 
-type HomeProps = {};
-
-function Home({}: HomeProps) {
+function Home() {
   const {
     currentPageNumber,
     prevPageNumber,
@@ -37,7 +37,7 @@ function Home({}: HomeProps) {
       <div className="flex flex-col">
         <div
           className="overflow-x-auto sm:-mx-6 lg:-mx-8"
-          style={{ height: "calc(100vh - 200px)" }}
+          style={{ height: "calc(100vh - 200px)", minWidth: 740 }}
         >
           <div className="inline-block py-2 min-w-full">
             <div className="overflow-hidden shadow-md sm:rounded-lg">
@@ -46,31 +46,31 @@ function Home({}: HomeProps) {
                   <tr>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                      className="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
                     >
                       Rank
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                      className="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
                     >
                       Name
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                      className="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
                     >
-                      Price
+                      <button className="text-base font-medium">PRICE</button>
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                      className="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
                     >
                       MarketCap
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                      className="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
                     >
                       Action
                     </th>
@@ -82,34 +82,83 @@ function Home({}: HomeProps) {
                       key={crypt.id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
-                      <td className="py-4 px-6 text-sm text-center text-gray-500 whitespace-nowrap dark:text-gray-400">
+                      <td className="py-4 px-6 text-base text-center text-gray-500 whitespace-nowrap dark:text-gray-400">
                         {crypt.metrics.marketcap.rank}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                      <td className="py-4 px-6 text-base text-gray-500 whitespace-nowrap dark:text-gray-400">
                         <div className="flex items-center">
                           <img
                             src={`https://messari.io/asset-images/${crypt.id}/32.png?v=2`}
                             className="h-32px w-32px"
+                            alt="icon"
                           />
                           <span className="ml-2">{crypt.name}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                      <td className="py-4 px-6 text-base text-gray-500 whitespace-nowrap dark:text-gray-400">
                         ${crypt.metrics.market_data.price_usd.toFixed(2)}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                      <td className="py-4 px-6 text-base text-gray-500 whitespace-nowrap dark:text-gray-400">
                         $
                         {formatCash(
                           crypt.metrics.marketcap.current_marketcap_usd
                         )}
                       </td>
-                      <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                        <button
-                          type="button"
-                          className="p-2 border border-slate-100 rounded-md text-blue-600 bg-slate-50 dark:text-blue-500 hover:bg-sky-100"
+                      <td className="py-4 px-6 text-base font-medium text-left whitespace-nowrap">
+                        <Menu
+                          as="div"
+                          className="relative inline-block text-left"
                         >
-                          Buy/Sell
-                        </button>
+                          <div>
+                            <Menu.Button className="flex p-2 border border-slate-100 rounded-md text-blue-600 bg-slate-50 dark:text-blue-500 hover:bg-sky-100">
+                              Buy/Sell
+                              <ChevronDownIcon
+                                className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
+                                aria-hidden="true"
+                              />
+                            </Menu.Button>
+                          </div>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                          >
+                            <Menu.Items className="absolute z-10 right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              <div className="px-1 py-1 ">
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      className={`${
+                                        active
+                                          ? "bg-blue-500 text-white"
+                                          : "text-gray-900"
+                                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                                    >
+                                      Buy
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      className={`${
+                                        active
+                                          ? "bg-blue-500 text-white"
+                                          : "text-gray-900"
+                                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                                    >
+                                      Sell
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                              </div>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
                       </td>
                     </tr>
                   ))}
